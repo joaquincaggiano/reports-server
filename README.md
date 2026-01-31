@@ -31,6 +31,24 @@
 $ pnpm install
 ```
 
+## Base de datos (Docker + Prisma)
+
+- **Levantar Postgres**:
+
+```bash
+docker compose up -d
+```
+
+- **Nota importante**: si tenés Postgres.app/local usando el puerto `5432`, este proyecto expone el Postgres de Docker en **`localhost:5433`** para evitar conflictos.
+
+- **Variables de entorno**: copiá `.env.template` a `.env` y ajustá lo que necesites.
+
+- **Introspección (db pull)**:
+
+```bash
+pnpx prisma db pull
+```
+
 ## Compile and run the project
 
 ```bash

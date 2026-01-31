@@ -1,0 +1,21 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Employee {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(100)
+  position     String   @db.VarChar(50)
+  startDate    DateTime @map("start_date") @db.Date
+  workTime     DateTime @map("work_time") @db.Time(6)
+  hoursPerDay  Int      @map("hours_per_day")
+  workSchedule String   @map("work_schedule") @db.VarChar(50)
+
+  @@map("employees")
+}
