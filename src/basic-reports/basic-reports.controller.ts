@@ -1,4 +1,4 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Param, Res } from '@nestjs/common';
 import { BasicReportsService } from './basic-reports.service';
 import type { Response } from 'express';
 
@@ -16,12 +16,24 @@ export class BasicReportsController {
     pdfDoc.end();
   }
 
-  @Get("employment-letter")
+  @Get('employment-letter')
   async employmentLetter(@Res() res: Response) {
     const pdfDoc = await this.basicReportsService.employmentLetter();
 
     res.setHeader('Content-Type', 'application/pdf');
     pdfDoc.info.Title = 'Employment Letter';
+    pdfDoc.pipe(res);
+    pdfDoc.end();
+  }
+
+  @Get('employment-letter/:id')
+  async employmentLetterById(@Param('id') id: string, @Res() res: Response) {
+    const pdfDoc = await this.basicReportsService.employmentLetterById(
+      Number(id),
+    );
+
+    res.setHeader('Content-Type', 'application/pdf');
+    pdfDoc.info.Title = `Employment Letter - ${id}`;
     pdfDoc.pipe(res);
     pdfDoc.end();
   }
