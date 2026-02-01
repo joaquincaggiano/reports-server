@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client';
 import { PrinterService } from 'src/printer/printer.service';
-import { getHelloWorldReport } from 'src/reports';
+import { getEmploymentLetterReport, getHelloWorldReport } from 'src/reports';
 
 @Injectable()
 export class BasicReportsService extends PrismaClient implements OnModuleInit {
@@ -20,6 +20,13 @@ export class BasicReportsService extends PrismaClient implements OnModuleInit {
 
   async hello() {
     const docDefinition = getHelloWorldReport({ name: 'Joaquín Caggiano' });
+
+    const doc = await this.printerService.createPdf(docDefinition);
+    return doc;
+  }
+
+  async employmentLetter() {
+    const docDefinition = getEmploymentLetterReport();
 
     const doc = await this.printerService.createPdf(docDefinition);
     return doc;
