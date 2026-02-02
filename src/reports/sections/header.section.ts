@@ -23,21 +23,40 @@ export const headerSection = ({
   showLogo = true,
   showDate = true,
 }: HeaderSectionOptions): Content => {
-  const headerLogo: Content = showLogo ? logo : '';
-  const headerDate: Content = showDate
-    ? {
+  const headerLogo = showLogo ? logo : '';
+  
+  const headerDate = showDate
+    ? ({
         text: DateFormatter.getDDMMMMYYYY(new Date()),
         alignment: 'right',
         margin: [0, 20, 20, 0],
-      }
+        width: 140,
+      } as Content)
     : '';
-  const headerTitle: Content = title
-    ? {
-        text: title,
-        bold: true,
+
+  const headerSubtitle = subtitle
+    ? ({
+        text: subtitle,
         alignment: 'center',
-        margin: [0, 20, 20, 0],
-      }
+        margin: [0, 5, 0, 20],
+        fontSize: 16,
+        bold: true,
+      } as Content)
+    : null;
+
+  const headerTitle = title
+    ? ({
+        stack: [
+          {
+            text: title,
+            bold: true,
+            alignment: 'center',
+            margin: [0, 20, 0, 0],
+            fontSize: 22,
+          },
+          headerSubtitle,
+        ],
+      } as Content)
     : '';
 
   return {
