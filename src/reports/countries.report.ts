@@ -1,12 +1,12 @@
 import { headerSection } from './sections/header.section';
-import { countries as Country } from 'src/generated/prisma/client';
+import { Countries } from '../generated/prisma/client';
 import { footerSection } from './sections/footer.section';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
 
 interface CountriesReportOptions {
   title?: string;
   subtitle?: string;
-  countries: Country[];
+  countries: Countries[];
 }
 
 export const getCountriesReport = (

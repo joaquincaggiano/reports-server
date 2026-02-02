@@ -21,16 +21,73 @@ model Employee {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model countries {
+model Countries {
   id        BigInt      @id @default(autoincrement())
   name      String?
   iso2      String
   iso3      String?
   localName String?     @map("local_name")
-  continent continents?
+  continent Continents?
+
+  @@map("countries")
 }
 
-enum continents {
+model Categories {
+  categoryId   Int        @id @default(autoincrement()) @map("category_id")
+  categoryName String?    @map("category_name") @db.VarChar(255)
+  description  String?    @db.VarChar(255)
+  products     Products[]
+
+  @@map("categories")
+}
+
+model Customers {
+  customerId   Int      @id @default(autoincrement()) @map("customer_id")
+  customerName String?  @map("customer_name") @db.VarChar(255)
+  contactName  String?  @map("contact_name") @db.VarChar(255)
+  address      String?  @db.VarChar(255)
+  city         String?  @db.VarChar(255)
+  postalCode   String?  @map("postal_code") @db.VarChar(255)
+  country      String?  @db.VarChar(255)
+  orders       Orders[]
+
+  @@map("customers")
+}
+
+model OrderDetails {
+  orderDetailId Int       @id @default(autoincrement()) @map("order_detail_id")
+  orderId       Int?      @map("order_id")
+  productId     Int?      @map("product_id")
+  quantity      Int?
+  orders        Orders?   @relation(fields: [orderId], references: [orderId], onDelete: NoAction, onUpdate: NoAction)
+  products      Products? @relation(fields: [productId], references: [productId], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("order_details")
+}
+
+model Orders {
+  orderId      Int            @id @default(autoincrement()) @map("order_id")
+  customerId   Int?           @map("customer_id")
+  orderDate    DateTime?      @map("order_date") @db.Date
+  orderDetails OrderDetails[]
+  customers    Customers?     @relation(fields: [customerId], references: [customerId], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("orders")
+}
+
+model Products {
+  productId    Int            @id @default(autoincrement()) @map("product_id")
+  productName  String?        @map("product_name") @db.VarChar(255)
+  categoryId   Int?           @map("category_id")
+  unit         String?        @db.VarChar(255)
+  price        Decimal?       @db.Decimal(10, 2)
+  orderDetails OrderDetails[]
+  categories   Categories?    @relation(fields: [categoryId], references: [categoryId], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("products")
+}
+
+enum Continents {
   Africa
   Antarctica
   Asia
