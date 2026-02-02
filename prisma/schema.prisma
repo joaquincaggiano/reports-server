@@ -19,3 +19,23 @@ model Employee {
 
   @@map("employees")
 }
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model countries {
+  id        BigInt      @id @default(autoincrement())
+  name      String?
+  iso2      String
+  iso3      String?
+  localName String?     @map("local_name")
+  continent continents?
+}
+
+enum continents {
+  Africa
+  Antarctica
+  Asia
+  Europe
+  Oceania
+  NorthAmerica @map("North America")
+  SouthAmerica @map("South America")
+}
