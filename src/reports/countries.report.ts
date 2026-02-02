@@ -50,6 +50,32 @@ export const getCountriesReport = (
           ],
         },
       },
+      {
+        text: 'Totales',
+        style: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 40, 0, 0],
+        },
+      },
+      {
+        layout: 'noBorders',
+        table: {
+          headerRows: 1,
+          body: [
+            [
+              {
+                text: 'Total de países',
+                bold: true,
+              },
+              {
+                text: countries.length.toString(),
+                bold: true,
+              },
+            ],
+          ],
+        },
+      },
     ],
     footer: (currentPage, pageCount, pageSize) =>
       footerSection({
