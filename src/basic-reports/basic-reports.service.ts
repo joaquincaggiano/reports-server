@@ -6,6 +6,7 @@ import {
   getEmploymentLetterReport,
   getEmploymentLetterByIdReport,
   getHelloWorldReport,
+  getCountriesReport,
 } from 'src/reports';
 
 @Injectable()
@@ -55,6 +56,13 @@ export class BasicReportsService extends PrismaClient implements OnModuleInit {
       employeeWorkSchedule: employee.workSchedule,
       employerCompany: 'Tucan Code Corp.',
     });
+
+    const doc = await this.printerService.createPdf(docDefinition);
+    return doc;
+  }
+
+  async getCountries() {
+    const docDefinition = getCountriesReport();
 
     const doc = await this.printerService.createPdf(docDefinition);
     return doc;
