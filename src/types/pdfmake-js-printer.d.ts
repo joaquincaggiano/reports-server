@@ -1,5 +1,5 @@
 declare module 'pdfmake/js/Printer' {
-  import type { TDocumentDefinition } from 'pdfmake';
+  import type { BufferOptions, DocumentDefinition } from 'pdfmake';
 
   type PdfKitDocument = NodeJS.ReadableStream & {
     info: Record<string, unknown>;
@@ -15,8 +15,7 @@ declare module 'pdfmake/js/Printer' {
 
     createPdfKitDocument(
       docDefinition: TDocumentDefinition,
-      options?: Record<string, unknown>,
+      options?: BufferOptions,
     ): Promise<PdfKitDocument>;
   }
 }
-

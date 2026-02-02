@@ -1,7 +1,7 @@
-import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { headerSection } from './sections/header.section';
 import { countries as Country } from 'src/generated/prisma/client';
 import { footerSection } from './sections/footer.section';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
 
 interface CountriesReportOptions {
   title?: string;
@@ -30,7 +30,7 @@ export const getCountriesReport = (
     pageMargins: [40, 120, 40, 60],
     content: [
       {
-        layout: 'lightHorizontalLines', // optional
+        layout: 'customLayout01', //'lightHorizontalLines', // optional
         table: {
           // headers are automatically repeated if the table spans over multiple pages
           // you can declare how many rows should be treated as headers
@@ -38,7 +38,14 @@ export const getCountriesReport = (
           widths: [50, 50, 50, '*', 'auto', '*'],
 
           body: [
-            ['ID', 'ISO2', 'ISO3', 'Name', 'Continent', 'Local Name'],
+            [
+              { text: 'ID', style: { color: 'white' } },
+              { text: 'ISO2', style: { color: 'white' } },
+              { text: 'ISO3', style: { color: 'white' } },
+              { text: 'Name', style: { color: 'white' } },
+              { text: 'Continent', style: { color: 'white' } },
+              { text: 'Local Name', style: { color: 'white' } },
+            ],
             ...countries.map((country) => [
               country.id.toString(),
               country.iso2,
