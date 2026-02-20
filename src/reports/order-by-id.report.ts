@@ -5,7 +5,7 @@ import {
   TDocumentDefinitions,
 } from 'pdfmake/interfaces';
 import { Orders } from 'src/generated/prisma/client';
-import { DateFormatter } from 'src/helpers';
+import { CurrencyFormatter, DateFormatter } from 'src/helpers';
 import { footerSection } from './sections/footer.section';
 
 const logo: Content = {
@@ -45,6 +45,7 @@ export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
         text: 'Tucan Code',
         style: 'header',
       },
+
       // Address y order data
       {
         columns: [
@@ -64,6 +65,7 @@ export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
           },
         ],
       },
+
       // QR
       {
         qr: 'https://moilab.es',
@@ -71,6 +73,7 @@ export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
         alignment: 'right',
         margin: [0, 20, 0, 20],
       },
+
       // Dirección del cliente
       {
         text: 'Cobrar a:\n',
@@ -78,6 +81,82 @@ export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
       },
       {
         text: `Razón social: Richer Supermarket\nMichael Holz\nGrenzacherweg 237`,
+      },
+
+      // Tabla del detalle de la orden
+      {
+        layout: 'headerLineOnly',
+        margin: [0, 20],
+        table: {
+          headerRows: 1,
+          widths: [50, '*', 'auto', 'auto', 'auto'],
+          body: [
+            ['ID', 'Descripción', 'Cantidad', 'Precio', 'Total'],
+            [
+              '1',
+              'Producto 1',
+              '1',
+              CurrencyFormatter.format(10),
+              {
+                text: CurrencyFormatter.format(10),
+                alignment: 'right',
+              },
+            ],
+            [
+              '2',
+              'Producto 2',
+              '2',
+              CurrencyFormatter.format(20),
+              {
+                text: CurrencyFormatter.format(40),
+                alignment: 'right',
+              },
+            ],
+            [
+              '3',
+              'Producto 3',
+              '3',
+              CurrencyFormatter.format(30),
+              {
+                text: CurrencyFormatter.format(1500),
+                alignment: 'right',
+              },
+            ],
+          ],
+        },
+      },
+
+      // Totales
+      {
+        columns: [
+          {
+            width: '*',
+            text: '',
+          },
+          {
+            width: 'auto',
+            layout: 'noBorders',
+            table: {
+              body: [
+                [
+                  'Subtotal',
+                  { text: CurrencyFormatter.format(1500), alignment: 'right' },
+                ],
+                [
+                  {
+                    text: 'Total',
+                    bold: true,
+                  },
+                  {
+                    text: CurrencyFormatter.format(1500),
+                    alignment: 'right',
+                    bold: true,
+                  },
+                ],
+              ],
+            },
+          },
+        ],
       },
     ],
   };
