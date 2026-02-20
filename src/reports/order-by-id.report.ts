@@ -4,9 +4,9 @@ import {
   StyleDictionary,
   TDocumentDefinitions,
 } from 'pdfmake/interfaces';
-import { Orders } from 'src/generated/prisma/client';
 import { CurrencyFormatter, DateFormatter } from 'src/helpers';
 import { footerSection } from './sections/footer.section';
+import { OrderData } from 'src/interfaces/order.interface';
 
 const logo: Content = {
   image: join(process.cwd(), 'src', 'assets', 'tucan-banner.png'),
@@ -28,7 +28,17 @@ const styles: StyleDictionary = {
   },
 };
 
-export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
+export const getOrderByIdReportDoc = (
+  order: OrderData,
+): TDocumentDefinitions => {
+  const { orderId, orderDate, customers, orderDetails } = order;
+
+  const subtotal = orderDetails.reduce((acc, orderDetail) => {
+    return acc + Number(orderDetail.products.price) * orderDetail.quantity;
+  }, 0);
+
+  const total = subtotal + subtotal * 0.15;
+
   const docDefinition: TDocumentDefinitions = {
     styles,
     header: logo,
@@ -56,10 +66,10 @@ export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
           {
             text: [
               {
-                text: `Recibo No. ${order.orderId}\n`,
+                text: `Recibo No. ${orderId}\n`,
                 bold: true,
               },
-              `${DateFormatter.getDDMMMMYYYY(order.orderDate ?? new Date())}\nPagar antes de: ${DateFormatter.getDDMMMMYYYY(new Date())}`,
+              `${DateFormatter.getDDMMMMYYYY(orderDate ?? new Date())}`,
             ],
             alignment: 'right',
           },
@@ -80,7 +90,7 @@ export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
         style: 'subHeader',
       },
       {
-        text: `Razón social: Richer Supermarket\nMichael Holz\nGrenzacherweg 237`,
+        text: `Razón social: ${customers.customerName}\n${customers.contactName}\n${customers.address}`,
       },
 
       // Tabla del detalle de la orden
@@ -92,36 +102,25 @@ export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
           widths: [50, '*', 'auto', 'auto', 'auto'],
           body: [
             ['ID', 'Descripción', 'Cantidad', 'Precio', 'Total'],
-            [
-              '1',
-              'Producto 1',
-              '1',
-              CurrencyFormatter.format(10),
-              {
-                text: CurrencyFormatter.format(10),
-                alignment: 'right',
-              },
-            ],
-            [
-              '2',
-              'Producto 2',
-              '2',
-              CurrencyFormatter.format(20),
-              {
-                text: CurrencyFormatter.format(40),
-                alignment: 'right',
-              },
-            ],
-            [
-              '3',
-              'Producto 3',
-              '3',
-              CurrencyFormatter.format(30),
-              {
-                text: CurrencyFormatter.format(1500),
-                alignment: 'right',
-              },
-            ],
+            ...orderDetails.map((orderDetail) => {
+              return [
+                orderDetail.orderDetailId.toString(),
+                orderDetail.products.productName,
+                orderDetail.quantity.toString(),
+                {
+                  text: CurrencyFormatter.format(
+                    Number(orderDetail.products.price),
+                  ),
+                  alignment: 'right' as const,
+                },
+                {
+                  text: CurrencyFormatter.format(
+                    Number(orderDetail.products.price) * orderDetail.quantity,
+                  ),
+                  alignment: 'right' as const,
+                },
+              ];
+            }),
           ],
         },
       },
@@ -140,7 +139,10 @@ export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
               body: [
                 [
                   'Subtotal',
-                  { text: CurrencyFormatter.format(1500), alignment: 'right' },
+                  {
+                    text: CurrencyFormatter.format(subtotal),
+                    alignment: 'right',
+                  },
                 ],
                 [
                   {
@@ -148,7 +150,7 @@ export const getOrderByIdReportDoc = (order: Orders): TDocumentDefinitions => {
                     bold: true,
                   },
                   {
-                    text: CurrencyFormatter.format(1500),
+                    text: CurrencyFormatter.format(total),
                     alignment: 'right',
                     bold: true,
                   },
