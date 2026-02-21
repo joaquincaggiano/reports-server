@@ -1,13 +1,23 @@
+import fs from 'fs';
 import { Injectable } from '@nestjs/common';
 import { PrinterService } from 'src/printer/printer.service';
-import { getHelloWorldReport } from 'src/reports';
+import { getHtmlContent } from 'src/helpers/html-to-pdfmake';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
+import { headerSection } from 'src/reports/sections/header.section';
 
 @Injectable()
 export class ExtraReportsService {
   constructor(private readonly printerService: PrinterService) {}
 
   async getHtmlReport() {
-    const docDefinition = getHelloWorldReport({ name: 'Joaquín Caggiano' });
+    const html = fs.readFileSync('src/reports/html/basic-01.html', 'utf8');
+    const content = getHtmlContent(html);
+
+    const docDefinition: TDocumentDefinitions = {
+      pageMargins: [40, 100, 40, 60],
+      header: headerSection({ title: 'HTML to PDFMake' }),
+      content,
+    };
 
     const doc = await this.printerService.createPdf(docDefinition);
     return doc;

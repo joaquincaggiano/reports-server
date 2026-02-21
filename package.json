@@ -29,6 +29,8 @@
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "axios": "^1.13.5",
+    "html-to-pdfmake": "^2.5.32",
+    "jsdom": "^28.1.0",
     "pdfmake": "^0.3.3",
     "pg": "^8.18.0",
     "reflect-metadata": "^0.2.2",
