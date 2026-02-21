@@ -30,7 +30,8 @@ export const headerSection = ({
         text: DateFormatter.getDDMMMMYYYY(new Date()),
         alignment: 'right',
         margin: [0, 20, 20, 0],
-        width: 140,
+        width: 100,
+        fontSize: 10,
       } as Content)
     : '';
 
@@ -40,7 +41,6 @@ export const headerSection = ({
         alignment: 'center',
         margin: [0, 5, 0, 20],
         fontSize: 16,
-        bold: true,
       } as Content)
     : null;
 
