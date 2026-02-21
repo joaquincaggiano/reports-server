@@ -5,6 +5,7 @@ import { getHtmlContent } from 'src/helpers/html-to-pdfmake';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { headerSection } from 'src/reports/sections/header.section';
 import { footerSection } from 'src/reports/sections/footer.section';
+import { getCommunityReport } from 'src/reports';
 
 @Injectable()
 export class ExtraReportsService {
@@ -13,7 +14,7 @@ export class ExtraReportsService {
   async getHtmlReport() {
     const html = fs.readFileSync('src/reports/html/basic-02.html', 'utf8');
     const content = getHtmlContent(html, {
-        client: "Joaquín Caggiano"
+      client: 'Joaquín Caggiano',
     });
 
     const docDefinition: TDocumentDefinitions = {
@@ -27,6 +28,13 @@ export class ExtraReportsService {
         }),
       content,
     };
+
+    const doc = await this.printerService.createPdf(docDefinition);
+    return doc;
+  }
+
+  async getCommunity() {
+    const docDefinition = getCommunityReport();
 
     const doc = await this.printerService.createPdf(docDefinition);
     return doc;

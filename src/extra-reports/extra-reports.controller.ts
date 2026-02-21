@@ -11,7 +11,17 @@ export class ExtraReportsController {
     const pdfDoc = await this.extraReportsService.getHtmlReport();
 
     res.setHeader('Content-Type', 'application/pdf');
-    pdfDoc.info.title = 'Hello World';
+    pdfDoc.info.title = 'HTML to PDFMake';
+    pdfDoc.pipe(res);
+    pdfDoc.end();
+  }
+
+  @Get('community-report')
+  async getCommunity(@Res() res: Response) {
+    const pdfDoc = await this.extraReportsService.getCommunity();
+
+    res.setHeader('Content-Type', 'application/pdf');
+    pdfDoc.info.title = 'Community Report';
     pdfDoc.pipe(res);
     pdfDoc.end();
   }
