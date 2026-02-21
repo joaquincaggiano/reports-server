@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
-import { chartJsToImage } from 'src/helpers';
+import { CHART_COLORS, chartJsToImage, numbers } from 'src/helpers';
 
 const svgContent = fs.readFileSync('src/assets/ford.svg', 'utf8');
 
@@ -26,9 +26,43 @@ const generateChartImage = async () => {
   return image;
 };
 
+const generateDonut = async () => {
+  const DATA_COUNT = 5;
+  const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
+
+  const data = {
+    labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: numbers(NUMBER_CFG),
+        backgroundColor: Object.values(CHART_COLORS),
+      },
+    ],
+  };
+
+  const config = {
+    type: 'doughnut',
+    data: data,
+    options: {
+      title: {
+        display: true,
+        text: 'Chart.js Doughnut Chart',
+      },
+    },
+  };
+
+  const image = await chartJsToImage(config);
+
+  return image;
+};
+
 export const getBasicSvgChartReport =
   async (): Promise<TDocumentDefinitions> => {
-    const chart = await generateChartImage();
+    const [chart, donut] = await Promise.all([
+      generateChartImage(),
+      generateDonut(),
+    ]);
 
     return {
       content: [
@@ -38,6 +72,10 @@ export const getBasicSvgChartReport =
         },
         {
           image: chart,
+          width: 500,
+        },
+        {
+          image: donut,
           width: 500,
         },
       ],
