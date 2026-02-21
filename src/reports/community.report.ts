@@ -6,7 +6,7 @@ export const getCommunityReport = (): TDocumentDefinitions => {
       fontSize: 10,
     },
     content: [
-      // Header
+      // Logo - Dirección - Número de orden
       {
         columns: [
           {
@@ -14,12 +14,12 @@ export const getCommunityReport = (): TDocumentDefinitions => {
             width: 50,
           },
           {
-            text: 'Forest Admin Community SAP\nRUT: 44.123.1243\nCamino montaña km 45\nTeléfono: +56 9 1234 5678',
             alignment: 'center',
+            text: `Forest Admin Community SAP\nRUT: 44.123.1233\nCamino montaña km 14\nTeléfono: 323.3123.123`,
           },
           {
             alignment: 'right',
-            width: 'auto',
+            width: 140,
             layout: 'borderBlue',
             table: {
               body: [
@@ -28,9 +28,9 @@ export const getCommunityReport = (): TDocumentDefinitions => {
                     layout: 'noBorders',
                     table: {
                       body: [
-                        ['No.', '123-456'],
-                        ['Fecha', '21/10/1997'],
-                        ['Versión', '2026-001'],
+                        ['No. Fac:', '123-456'],
+                        ['Fecha:', '2021-09-01'],
+                        ['Versión:', '2024-001'],
                       ],
                     },
                   },
@@ -40,9 +40,10 @@ export const getCommunityReport = (): TDocumentDefinitions => {
           },
         ],
       },
-      // Horizontal line
+
+      // Horizontal Line
       {
-        margin: [0, 10],
+        margin: [0, 5],
         canvas: [
           {
             type: 'line',
@@ -54,6 +55,91 @@ export const getCommunityReport = (): TDocumentDefinitions => {
             lineColor: '#3A4546',
           },
         ],
+      },
+
+      // Detalles del cliente
+      {
+        table: {
+          widths: ['auto', '*', 'auto', '*'],
+          body: [
+            [
+              {
+                text: 'Datos del cliente',
+                fillColor: '#5775e1',
+                color: 'white',
+                colSpan: 4,
+              },
+              {},
+              {},
+              {},
+            ],
+
+            // Razón social
+            [
+              {
+                text: 'Razón social',
+                fillColor: '#343a40',
+                color: 'white',
+                bold: true,
+              },
+              {
+                text: 'Nombre de la empresa',
+                fillColor: 'white',
+              },
+              {
+                text: 'Dirección',
+                fillColor: '#343a40',
+                color: 'white',
+              },
+              {
+                text: 'Calle falsa 123',
+                fillColor: 'white',
+              },
+            ],
+            [
+              {
+                text: 'RUT',
+                fillColor: '#343a40',
+                color: 'white',
+                bold: true,
+              },
+              {
+                text: '',
+                fillColor: 'white',
+              },
+              {
+                text: 'Teléfono',
+                fillColor: '#343a40',
+                color: 'white',
+              },
+              {
+                text: '',
+                fillColor: 'white',
+              },
+            ],
+            [
+              {
+                text: 'Giro',
+                fillColor: '#343a40',
+                color: 'white',
+                bold: true,
+              },
+              {
+                text: '',
+                fillColor: 'white',
+              },
+              {
+                text: 'Condición de pago',
+                fillColor: '#343a40',
+                color: 'white',
+              },
+              {
+                text: '',
+                fillColor: 'white',
+              },
+            ],
+          ],
+        },
       },
     ],
   };
