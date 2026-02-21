@@ -1,4 +1,4 @@
-import { chartJsToImage } from 'src/helpers';
+import { CHART_COLORS, chartJsToImage } from 'src/helpers';
 
 interface DonutEntry {
   label: string;
@@ -20,6 +20,7 @@ export const getDonutChart = async (options: DonutOptions): Promise<string> => {
       {
         label: dataSetLabel ?? 'Donut Chart',
         data: entries.map((entry) => entry.value),
+        backgroundColor: Object.values(CHART_COLORS),
       },
     ],
   };

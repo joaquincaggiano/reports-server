@@ -34,8 +34,38 @@ export const getStatisticsReport = async (
   const docDefinition: TDocumentDefinitions = {
     content: [
       {
-        image: donut,
-        width: 500,
+        columns: [
+          {
+            stack: [
+              {
+                text: 'Top Countries',
+                alignment: 'center',
+                bold: true,
+                fontSize: 14,
+                margin: [0, 0, 0, 20],
+              },
+              {
+                image: donut,
+                width: 350,
+              },
+            ],
+          },
+          {
+            layout: 'lightHorizontalLines',
+            width: 'auto',
+            table: {
+              headerRows: 1,
+              widths: [100, '*'],
+              body: [
+                ['País', 'Clientes'],
+                ...topCountries.map((country) => [
+                  country.country ?? 'Unknown',
+                  country.customersCount.toString(),
+                ]),
+              ],
+            },
+          },
+        ],
       },
     ],
   };
