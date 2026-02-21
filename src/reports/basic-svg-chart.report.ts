@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
-import { CHART_COLORS, chartJsToImage, numbers } from 'src/helpers';
+import { chartJsToImage } from 'src/helpers';
+import { getDonutChart } from './charts/donut.chart';
 
 const svgContent = fs.readFileSync('src/assets/ford.svg', 'utf8');
 
@@ -26,42 +27,36 @@ const generateChartImage = async () => {
   return image;
 };
 
-const generateDonut = async () => {
-  const DATA_COUNT = 5;
-  const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
-
-  const data = {
-    labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: numbers(NUMBER_CFG),
-        backgroundColor: Object.values(CHART_COLORS),
-      },
-    ],
-  };
-
-  const config = {
-    type: 'doughnut',
-    data: data,
-    options: {
-      title: {
-        display: true,
-        text: 'Chart.js Doughnut Chart',
-      },
-    },
-  };
-
-  const image = await chartJsToImage(config);
-
-  return image;
-};
-
 export const getBasicSvgChartReport =
   async (): Promise<TDocumentDefinitions> => {
     const [chart, donut] = await Promise.all([
       generateChartImage(),
-      generateDonut(),
+      getDonutChart({
+        entries: [
+          {
+            label: 'Red',
+            value: 10,
+          },
+          {
+            label: 'Blue',
+            value: 20,
+          },
+          {
+            label: 'Green',
+            value: 30,
+          },
+          {
+            label: 'Yellow',
+            value: 40,
+          },
+          {
+            label: 'Purple',
+            value: 50,
+          },
+        ],
+        title: 'Donut Chart',
+        dataSetLabel: 'Values',
+      }),
     ]);
 
     return {

@@ -1,5 +1,5 @@
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
-import { chartJsToImage } from 'src/helpers';
+import { getDonutChart } from './charts/donut.chart';
 
 interface TopCountry {
   country: string | null;
@@ -12,50 +12,24 @@ interface ReportOptions {
   topCountries: TopCountry[];
 }
 
-const generateTopCountryDonut = async (
-  topCountries: TopCountry[],
-): Promise<string> => {
-  const data = {
-    labels: topCountries.map((country) => country.country ?? 'Unknown'),
-    datasets: [
-      {
-        label: 'Customers Count',
-        data: topCountries.map((country) => country.customersCount),
-      },
-    ],
-  };
-
-  const config = {
-    type: 'doughnut',
-    data: data,
-    options: {
-      legend: {
-        position: 'left',
-      },
-      plugins: {
-        datalabels: {
-          color: 'white',
-          font: {
-            bold: true,
-            size: 14,
-          },
-        },
-      },
-      title: {
-        display: true,
-        text: 'Top Countries',
-      },
-    },
-  };
-
-  const image = await chartJsToImage(config);
-  return image;
-};
-
 export const getStatisticsReport = async (
   options: ReportOptions,
 ): Promise<TDocumentDefinitions> => {
-  const donut = await generateTopCountryDonut(options.topCountries);
+  const { topCountries } = options;
+
+  const donutEntries = topCountries.map((country) => ({
+    label: country.country ?? 'Unknown',
+    value: country.customersCount,
+  }));
+
+  const donutOptions = {
+    entries: donutEntries,
+    //title: 'Top Countries',
+    dataSetLabel: 'Customers Count',
+    position: 'left' as const,
+  };
+
+  const donut = await getDonutChart(donutOptions);
 
   const docDefinition: TDocumentDefinitions = {
     content: [
