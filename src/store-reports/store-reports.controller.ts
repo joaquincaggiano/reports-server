@@ -27,4 +27,14 @@ export class StoreReportsController {
     pdfDoc.pipe(res);
     pdfDoc.end();
   }
+
+  @Get('statistics')
+  async getStatistics(@Res() res: Response) {
+    const pdfDoc = await this.storeReportsService.getStatistics();
+
+    res.setHeader('Content-Type', 'application/pdf');
+    pdfDoc.info.Title = `Statistics Report`;
+    pdfDoc.pipe(res);
+    pdfDoc.end();
+  }
 }
